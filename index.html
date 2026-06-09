@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Founder's Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#20242c;
+    --ink-soft:#4b5260;
+    --paper:#ffffff;
+    --page:#fbfaf7;
+    --line:#dedbd3;
+    --focus:#ffbf47;
+
+    --a-bg:#fff4d7; --a-edge:#7a5200;
+    --b-bg:#eaf2ff; --b-edge:#1f5d99;
+    --c-bg:#eaf7ef; --c-edge:#2f6f44;
+    --d-bg:#fdebf3; --d-edge:#87385a;
+    --e-bg:#f1ecff; --e-edge:#59479a;
+
+    --good:#1f6a3a;
+    --warn:#a23f20;
+    --mixed:#5c4d8c;
+
+    --display:"Lexend","Atkinson Hyperlegible",Verdana,Arial,sans-serif;
+    --body:"Atkinson Hyperlegible","Lexend",Verdana,Arial,sans-serif;
+    --radius:18px;
+    --shadow:0 12px 30px rgba(32,36,44,.07), 0 2px 8px rgba(32,36,44,.05);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html.reduce-motion{scroll-behavior:auto;}
+  body{
+    margin:0;
+    font-family:var(--body);
+    color:var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(255,244,215,.9), transparent 36rem),
+      radial-gradient(circle at 90% 20%, rgba(234,242,255,.9), transparent 34rem),
+      var(--page);
+    line-height:1.78;
+    letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:#174f88;text-decoration-thickness:.12em;text-underline-offset:.18em;}
+  a:focus-visible, button:focus-visible{
+    outline:4px solid var(--focus);
+    outline-offset:3px;
+  }
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:10px;
+    background:#000;
+    color:#fff;
+    padding:10px 14px;
+    border-radius:10px;
+    z-index:20;
+  }
+  .skip-link:focus{left:12px;}
+  .wrap{
+    max-width:900px;
+    margin:0 auto;
+    padding:24px 22px 90px;
+  }
+  .sr-only{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    padding:0!important;
+    margin:-1px!important;
+    overflow:hidden!important;
+    clip:rect(0,0,0,0)!important;
+    white-space:nowrap!important;
+    border:0!important;
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    margin:0 0 18px;
+  }
+  .brand-mini{
+    font-family:var(--display);
+    font-weight:700;
+    letter-spacing:.02em;
+    font-size:15px;
+  }
+  .toolbar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .tool{
+    font-family:var(--display);
+    font-weight:700;
+    border:2px solid var(--ink);
+    background:#fff;
+    color:var(--ink);
+    border-radius:999px;
+    padding:9px 12px;
+    cursor:pointer;
+    font-size:13.5px;
+    min-height:44px;
+  }
+  .tool[aria-pressed="true"]{
+    background:var(--ink);
+    color:#fff;
+  }
+
+  .rail-wrap{
+    background:rgba(255,255,255,.78);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px 16px;
+    box-shadow:0 4px 14px rgba(32,36,44,.04);
+    margin:0 0 24px;
+  }
+  .rail-label{
+    font-family:var(--display);
+    font-size:14px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin:0 0 9px;
+  }
+  .rail{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .dot{
+    height:10px;
+    flex:1;
+    min-width:18px;
+    border-radius:999px;
+    background:#dfdcd2;
+    border:1px solid rgba(32,36,44,.05);
+  }
+  .dot.done{background:#2d3748;}
+  .dot.active{
+    background:#f5bd45;
+    border:2px solid #4a3300;
+  }
+
+  .eyebrow{
+    font-family:var(--display);
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 12px;
+  }
+  h1.hero{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(42px,8vw,70px);
+    line-height:1.02;
+    letter-spacing:-.02em;
+    margin:0 0 18px;
+  }
+  h2.q{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(29px,5vw,46px);
+    line-height:1.12;
+    letter-spacing:-.015em;
+    margin:0 0 18px;
+  }
+  h3{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:21px;
+    margin:0 0 8px;
+  }
+  h4{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:17px;
+    margin:0 0 6px;
+  }
+  p{font-size:18px;margin:0 0 17px;}
+  strong{font-weight:700;}
+  em{font-style:italic;}
+
+  .hero-card,.scene,.read,.result-panel{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+  }
+  .hero-card{
+    padding:34px 30px;
+    border-top:10px solid #2d3748;
+  }
+  .lede{font-size:21px;line-height:1.7;}
+  .note{
+    border-top:1px solid var(--line);
+    padding-top:16px;
+    color:var(--ink-soft);
+    font-size:15.5px;
+  }
+  .scene{
+    border-left:12px solid var(--scene-edge, #7a5200);
+    padding:24px 26px;
+    margin:0 0 24px;
+  }
+  .scene p:last-child{margin-bottom:0;}
+
+  .prompt{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:17px;
+    margin:0 0 14px;
+  }
+  .choices{
+    display:grid;
+    gap:14px;
+    margin:0 0 20px;
+  }
+
+  button.choice{
+    --choice-bg:#fff;
+    --choice-edge:#222;
+    width:100%;
+    text-align:left;
+    display:grid;
+    grid-template-columns:58px 1fr;
+    gap:14px;
+    align-items:start;
+    min-height:74px;
+    border:2.5px solid var(--choice-edge);
+    border-left:14px solid var(--choice-edge);
+    background:var(--choice-bg);
+    color:var(--ink);
+    border-radius:18px;
+    padding:16px 18px 16px 14px;
+    cursor:pointer;
+    font-family:var(--body);
+    box-shadow:0 4px 12px rgba(32,36,44,.05);
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  button.choice:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 20px rgba(32,36,44,.08);
+  }
+  button.choice[aria-pressed="true"]{
+    box-shadow:0 0 0 4px rgba(32,36,44,.12), 0 10px 22px rgba(32,36,44,.10);
+  }
+  button.choice[aria-pressed="true"] .selected-text{display:inline;}
+  .selected-text{
+    display:none;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:13px;
+    color:var(--choice-edge);
+    margin-left:8px;
+  }
+  .choice.option-a{--choice-bg:var(--a-bg);--choice-edge:var(--a-edge);}
+  .choice.option-b{--choice-bg:var(--b-bg);--choice-edge:var(--b-edge);}
+  .choice.option-c{--choice-bg:var(--c-bg);--choice-edge:var(--c-edge);}
+  .choice.option-d{--choice-bg:var(--d-bg);--choice-edge:var(--d-edge);}
+  .choice.option-e{--choice-bg:var(--e-bg);--choice-edge:var(--e-edge);}
+
+  .choice-marker{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+  }
+  .tag{
+    width:36px;
+    height:36px;
+    border-radius:12px;
+    background:var(--choice-edge);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:17px;
+  }
+  .icon{
+    font-size:24px;
+    line-height:1;
+  }
+  .choice-title{
+    display:block;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:18px;
+    line-height:1.35;
+    margin:0 0 5px;
+  }
+  .choice-label{
+    display:block;
+    font-size:17px;
+    line-height:1.55;
+  }
+
+  .result{
+    margin-top:18px;
+  }
+  .result[hidden]{display:none;}
+  .result-panel{
+    border-left:12px solid var(--current-edge, #7a5200);
+    padding:22px;
+    margin:0 0 14px;
+  }
+  .result-panel.what{
+    background:linear-gradient(0deg, rgba(255,255,255,.65), rgba(255,255,255,.65)), var(--current-bg);
+  }
+  .result-panel.term{
+    background:#fff;
+  }
+  .result-panel.example{
+    background:#f7f5ef;
+    border-style:solid;
+  }
+  .kicker{
+    font-family:var(--display);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+  }
+  .result-panel p:last-child{margin-bottom:0;}
+
+  .indicators{
+    display:grid;
+    gap:10px;
+    margin-top:12px;
+  }
+  .ind{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    border-top:1px solid rgba(32,36,44,.12);
+    padding-top:10px;
+  }
+  .ind:first-child{
+    border-top:0;
+    padding-top:0;
+  }
+  .mark{
+    flex:0 0 auto;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:13px;
+    padding:4px 9px;
+    border-radius:999px;
+    min-width:76px;
+    text-align:center;
+  }
+  .mark.up{background:#dff1e5;color:var(--good);border:1px solid #89c79c;}
+  .mark.down{background:#f8dfd3;color:var(--warn);border:1px solid #d49980;}
+  .mark.mixed{background:#ece6f5;color:var(--mixed);border:1px solid #b2a7d5;}
+  .ind-body{font-size:15.5px;line-height:1.55;}
+  .links{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:12px;
+  }
+  .pill-link{
+    display:inline-flex;
+    align-items:center;
+    min-height:44px;
+    border:2px solid var(--ink);
+    border-radius:999px;
+    padding:8px 13px;
+    background:#fff;
+    color:var(--ink);
+    text-decoration:none;
+    font-family:var(--display);
+    font-weight:700;
+    font-size:14px;
+  }
+
+  .actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+  button.btn{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:16px;
+    min-height:48px;
+    border-radius:14px;
+    padding:12px 20px;
+    border:2px solid var(--ink);
+    cursor:pointer;
+  }
+  button.btn.primary{
+    background:var(--ink);
+    color:#fff;
+  }
+  button.btn.ghost{
+    background:#fff;
+    color:var(--ink);
+  }
+
+  .read{
+    padding:28px;
+    margin-bottom:20px;
+  }
+  .toolkit{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:12px;
+    margin:10px 0 24px;
+  }
+  .chip{
+    border:1px solid var(--line);
+    border-left:10px solid #2d3748;
+    border-radius:16px;
+    padding:15px;
+    background:#fff;
+  }
+  .chip:nth-child(5n+1){border-left-color:var(--a-edge);background:var(--a-bg);}
+  .chip:nth-child(5n+2){border-left-color:var(--b-edge);background:var(--b-bg);}
+  .chip:nth-child(5n+3){border-left-color:var(--c-edge);background:var(--c-bg);}
+  .chip:nth-child(5n+4){border-left-color:var(--d-edge);background:var(--d-bg);}
+  .chip:nth-child(5n+5){border-left-color:var(--e-edge);background:var(--e-bg);}
+  .chip p{font-size:15.5px;line-height:1.55;color:var(--ink);}
+  .end-card{
+    background:#20242c;
+    color:#fff;
+    border-radius:24px;
+    padding:30px;
+    margin:20px 0;
+    box-shadow:var(--shadow);
+  }
+  .end-card .eyebrow{color:#dce3ef;}
+  .end-card p,.end-card h2,.end-card h3{color:#fff;}
+
+  .fade{animation:fade .35s ease;}
+  @keyframes fade{
+    from{opacity:0; transform:translateY(6px);}
+    to{opacity:1; transform:none;}
+  }
+
+  body.reader-mode{
+    line-height:2;
+    letter-spacing:.03em;
+  }
+  body.reader-mode p,
+  body.reader-mode .choice-label{font-size:19.5px;}
+  body.reader-mode .eyebrow,
+  body.reader-mode .kicker{
+    text-transform:none;
+    letter-spacing:.04em;
+  }
+  body.reader-mode em{
+    font-style:normal;
+    font-weight:700;
+  }
+  body.reader-mode .fade{animation:none;}
+
+  body.high-contrast{
+    --ink:#000;
+    --ink-soft:#111;
+    --paper:#fff;
+    --page:#fff;
+    --line:#000;
+    --focus:#ffcc00;
+    background:#fff;
+  }
+  body.high-contrast .choice{
+    background:#fff!important;
+    border-color:#000!important;
+    border-left-color:#000!important;
+  }
+  body.high-contrast .tag{
+    background:#000!important;
+    color:#fff!important;
+  }
+  body.high-contrast .result-panel{
+    background:#fff!important;
+    border-color:#000!important;
+    border-left-color:#000!important;
+  }
+  body.high-contrast .tool[aria-pressed="true"],
+  body.high-contrast .btn.primary{
+    background:#000;
+    color:#fff;
+  }
+  body.high-contrast .chip{
+    background:#fff!important;
+    border-color:#000!important;
+    border-left-color:#000!important;
+  }
+
+  html.reduce-motion *{
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important;}
+  }
+
+  @media (max-width:650px){
+    .wrap{padding:18px 14px 80px;}
+    .hero-card,.read{padding:24px 20px;}
+    .scene,.result-panel{padding:20px;}
+    button.choice{
+      grid-template-columns:48px 1fr;
+      gap:10px;
+      padding:14px 14px 14px 10px;
+      border-left-width:10px;
+    }
+    .choice-title{font-size:17px;}
+    .choice-label{font-size:16.5px;}
+    .tag{width:34px;height:34px;}
+  }
+
+  @media print{
+    .toolbar,.actions,.skip-link{display:none!important;}
+    body{background:#fff;}
+    .wrap{max-width:none;padding:0;}
+    .hero-card,.scene,.read,.result-panel,.chip{box-shadow:none;break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#app">Skip to simulation</a>
+<div class="wrap">
+  <header class="topbar" aria-label="Simulation controls">
+    <div class="brand-mini">The Founder’s Room</div>
+    <div class="toolbar">
+      <button class="tool" id="readerToggle" aria-pressed="false" type="button">Reader mode</button>
+      <button class="tool" id="contrastToggle" aria-pressed="false" type="button">High contrast</button>
+      <button class="tool" id="motionToggle" aria-pressed="false" type="button">Reduce motion</button>
+    </div>
+  </header>
+  <main id="app" tabindex="-1"></main>
+</div>
+
+<script type="application/json" id="lesson-data">[{"step":"Step 1 of 8","section":"The Spark","accent":"amber","title":"Is this a real opportunity, or just a nice idea?","scene":["You have been mixing a fizzy fruit drink at home because energy drinks leave your friends jittery, sugary sodas feel heavy, and plain water is… fine, but boring.","Every time you bring the drink somewhere, someone asks, <strong>“Wait, where did you get that?”</strong> Your roommate says, “You should sell this.” So: do you have a business?"],"prompt":"Pick the answer closest to how a real founder would think.","choices":[{"icon":"✨","title":"Trust the compliments","label":"Start selling because everyone who tries it says it tastes great.","consequence":["You print labels, buy ingredients in bulk, and set up at a campus event. People smile, take samples, and say, <strong>“This is actually good.”</strong>","By the end of the day, you gave away forty samples and sold six bottles. The compliments were real. The business evidence was weak."],"indicators":[{"dir":"down","mark":"Weak signal","label":"Compliments are not the same as sales","note":"People can genuinely like something and still not pay for it."}],"concept":{"name":"Weak signal versus real evidence","body":["A <strong>signal</strong> is a clue. A compliment is a signal, but it is a soft one. Real evidence is stronger: someone pays, pre-orders, joins a waitlist, switches from another product, or asks when they can buy again.","Entrepreneurship starts when a founder learns to separate excitement from evidence."],"example_title":"Poppi: kitchen interest became market evidence","example":["Poppi began as a kitchen experiment by Allison and Stephen Ellsworth. PepsiCo later described it as a home-brewed drink that became a farmers’ market favorite before moving into major retailers.","That path matters: people did not just say “cute drink.” They bought it again in real places."]}},{"icon":"💵","title":"Test willingness to pay","label":"Ask people whether they would pay for it, and at what price, before spending money.","consequence":["You ask twenty people a sharper question: <strong>“Would you pay $4 for this instead of your usual drink?”</strong> Eleven say yes. Six ask if they can buy one now.","Now you are not just hearing praise. You are seeing whether the problem is worth money."],"indicators":[{"dir":"up","mark":"Strong signal","label":"Payment interest","note":"You tested whether people would open their wallet, not just whether they were polite."}],"concept":{"name":"Opportunity recognition","body":["An <strong>opportunity</strong> is a real problem or desire that people will pay to address.","The test is not, <em>“Do people like my idea?”</em> The stronger question is, <strong>“Who has this problem, how painful is it, and would they pay for a better solution?”</strong>"],"example_title":"Poppi: a drink attached to a customer problem","example":["Poppi did not only sell flavor. It attached the drink to a modern customer problem: people wanted soda-like taste with less sugar and a wellness feel.","That is why the opportunity was bigger than one recipe."]}},{"icon":"🧪","title":"Run a tiny experiment","label":"Make twenty bottles, sell them for one afternoon, and study what actually happens.","consequence":["You run a small test. You learn which flavor sells, what price gets pushback, and which customers come back for a second bottle.","The test does not prove everything, but it makes the next decision less blind."],"indicators":[{"dir":"up","mark":"Smart risk","label":"Small bet first","note":"You risked enough to learn, but not enough to wreck the whole idea."}],"concept":{"name":"Minimum viable test","body":["A <strong>minimum viable test</strong> is the smallest realistic experiment that can teach you something useful.","It is not a full launch. It is a controlled way to find out whether the idea behaves the way you hoped when real customers encounter it."],"example_title":"From farmers market to retail shelf","example":["Farmers markets are powerful because they give founders face-to-face evidence: who stops, who buys, who returns, what they ask, and what they ignore.","That kind of small-market learning can shape the bigger version of a brand."]}},{"icon":"🧭","title":"Check the pattern","label":"Find out whether this is one friend’s taste or a repeated problem across many people.","consequence":["You ask around and notice a pattern: gym friends, commuters, and students all complain about the same thing — drinks that are either too sugary, too boring, or too expensive.","One person’s preference is not a market. A repeated pattern can be."],"indicators":[{"dir":"up","mark":"Pattern found","label":"More than one person","note":"You looked for repeated behavior across a group, not one isolated reaction."}],"concept":{"name":"Market pattern","body":["A <strong>market pattern</strong> appears when many people share the same unmet need and behave in similar ways.","Founders are pattern readers. They notice when scattered complaints point toward the same opportunity."],"example_title":"Stanley: a product found a new pattern","example":["Stanley’s Quencher existed before it became a phenomenon. The opportunity grew when the brand found a new customer pattern: people wanted hydration plus color, identity, convenience, and collectability.","The cup did not only hold water. It fit routines, outfits, desks, cars, and social feeds."]}}]},{"step":"Step 2 of 8","section":"The Customer","accent":"blue","title":"Who is this actually for?","scene":["<strong>“Everyone”</strong> sounds ambitious, but it usually makes a product blurry. If you build for everyone, nobody feels like the product was made for them.","Your first real decision is not the flavor. It is the person. Who are you building for first?"],"prompt":"Choose your first customer.","choices":[{"icon":"🏋️","title":"Label readers","label":"People who care about ingredients and want a cleaner soda alternative.","consequence":["You make the label clearer, simplify the flavors, and sell where wellness shoppers already go.","This group can be loyal, but they will also question your claims. The promise has to be accurate."],"indicators":[{"dir":"up","mark":"Focused","label":"Clear buyer","note":"A specific buyer makes product, price, and promotion easier to decide."},{"dir":"down","mark":"Scrutiny","label":"Claims matter","note":"Wellness customers read closely and will expect evidence."}],"concept":{"name":"Customer segment","body":["A <strong>customer segment</strong> is the specific group you serve first.","Good segmentation is practical. It tells you where to sell, what to say, what to charge, and what proof customers need before they trust you."],"example_title":"Poppi: wellness plus culture","example":["Poppi connected soda to wellness language, but it also used bright packaging, social media, and a playful brand voice to reach Gen Z and millennial shoppers.","That combination made the customer segment feel contemporary rather than medicinal."]}},{"icon":"📸","title":"Status and style buyers","label":"People who want the drink to look good in their hand, car, desk, or social post.","consequence":["Now the can matters almost as much as the taste. Color, shape, name, and vibe become part of the product.","You are not only selling a drink. You are selling a small identity object."],"indicators":[{"dir":"up","mark":"Premium","label":"Style creates value","note":"People pay more when the product helps express who they are."},{"dir":"mixed","mark":"Trend risk","label":"Taste shifts","note":"If the value is partly social, you must keep reading the culture."}],"concept":{"name":"Value proposition","body":["A <strong>value proposition</strong> is the reason a customer chooses you instead of doing nothing or buying something else.","Sometimes the value is functional. Sometimes it is emotional, social, aesthetic, or identity-based."],"example_title":"Stanley: hydration became identity","example":["Stanley’s Quencher became much more than a water cup. Its colors, size, limited drops, and social visibility turned hydration into a lifestyle signal.","The customer was not only buying water access. They were buying routine, belonging, and a look."]}},{"icon":"👨‍👩‍👧","title":"Trust-first buyers","label":"Parents or caregivers who want a drink they feel better about giving to kids.","consequence":["This customer can become very loyal once trust is earned. But the sales cycle is slower because the buyer is cautious.","You will need plain claims, clear ingredients, and a brand that feels safe, not just cool."],"indicators":[{"dir":"up","mark":"Loyal","label":"Trust can stick","note":"Once caregivers trust a product, repeat buying can be strong."},{"dir":"down","mark":"Slow","label":"Proof required","note":"This group rarely buys based on hype alone."}],"concept":{"name":"Trust-based value proposition","body":["Some products win because they feel exciting. Others win because they feel safe.","A <strong>trust-based value proposition</strong> depends on credibility, transparency, and proof. This matters especially in food, health, childcare, finance, and education."],"example_title":"Health claims can become a legal and ethical issue","example":["Functional beverage brands must be careful because customers may treat marketing language as a promise.","That matters because branding can create demand, but claims have to be defensible."]}},{"icon":"🌍","title":"Everyone with money","label":"Do not choose. Make it for everyone so the market is as big as possible.","consequence":["The flavor becomes safe, the packaging generic, the message vague, and the price forgettable.","<strong>For everyone</strong> quietly becomes <strong>for no one in particular</strong>."],"indicators":[{"dir":"down","mark":"Blurry","label":"No sharp edge","note":"A broad target often creates a product no group feels attached to."}],"concept":{"name":"Undifferentiated market","body":["An <strong>undifferentiated market</strong> strategy treats everyone as the same buyer.","Big companies can sometimes afford this. New founders usually cannot. They need a sharp first audience that helps the product become memorable."],"example_title":"Liquid Death did the opposite","example":["Liquid Death could have said, “Water is for everyone.” Instead, it built a loud, darkly funny brand around canned water.","The narrow identity made an ordinary product feel distinctive."]}}]},{"step":"Step 3 of 8","section":"The Path","accent":"sage","title":"What are you actually trying to build?","scene":["A mentor asks a question that changes everything: <strong>“What do you want this to become?”</strong>","The answer decides how fast you grow, how much money you need, how much control you keep, and what counts as success."],"prompt":"Choose the road you want to drive.","choices":[{"icon":"🏪","title":"Stay local and strong","label":"Sell at local markets and online, earn steady income, and keep full control.","consequence":["You stay close to the customer and keep the business manageable.","Growth is smaller and slower, but that is not a weakness if the goal is a good living and local impact."],"indicators":[{"dir":"up","mark":"Control","label":"Owner decides","note":"You keep decision-making power because the business does not depend on outside investors."},{"dir":"mixed","mark":"Limited","label":"Growth ceiling","note":"The business can succeed without becoming national."}],"concept":{"name":"Small business entrepreneurship","body":["A <strong>small business</strong> is built to serve a defined market and support the owner, employees, and community.","Small does not mean simple or unimportant. It means the business does not need explosive national growth to be successful."],"example_title":"Local service businesses can be sophisticated","example":["Think mobile car detailing, tutoring, catering, lash services, cleaning, pet care, meal prep, event setup, or a campus micro-café.","These businesses can be profitable because they solve clear local problems and keep operations close to the owner."]}},{"icon":"🚀","title":"Go national fast","label":"Build a repeatable product that can move into thousands of stores.","consequence":["You are choosing speed, scale, and pressure.","To reach national shelves, you need systems, distribution, capital, and a brand that travels beyond your original community."],"indicators":[{"dir":"up","mark":"Scale","label":"Repeatable growth","note":"The same product can be sold across many places without reinventing the business each time."},{"dir":"down","mark":"Pressure","label":"Fast expectations","note":"Fast growth usually requires outside capital and intense execution."}],"concept":{"name":"Scalable startup entrepreneurship","body":["A <strong>scalable startup</strong> is designed to grow quickly across markets.","The key word is not “successful.” A local tutoring business can be successful. It becomes scalable only if the model can grow without depending on one person doing all the work."],"example_title":"Poppi: from home-brewed drink to national retailer","example":["Poppi’s path shows scale: home recipe, farmers markets, Shark Tank attention, rebrand, retail distribution, and eventually PepsiCo acquisition.","The drink became a system: brand, packaging, production, distribution, and repeat buying."]}},{"icon":"🌱","title":"Lead with the mission","label":"Use the business to improve access to healthier drinks in places with few good options.","consequence":["Profit still matters because the business has to survive.","But your scoreboard changes. You measure success by the problem you reduce, not only the money you make."],"indicators":[{"dir":"up","mark":"Impact","label":"Mission-led","note":"The social problem is not decoration. It guides real decisions."},{"dir":"mixed","mark":"Tension","label":"Mission and money","note":"You must balance impact with financial survival."}],"concept":{"name":"Social entrepreneurship","body":["<strong>Social entrepreneurship</strong> uses business tools to address a social or environmental problem.","The venture may earn money, but impact is central to the model rather than an afterthought."],"example_title":"Too Good To Go: marketplace plus mission","example":["Too Good To Go describes itself as a social impact company and a marketplace for surplus food.","Its app connects users with stores, cafés, and restaurants that have food left at the end of the day. The customer gets value; the business reduces waste."]}},{"icon":"🏢","title":"Build inside something bigger","label":"Pitch the drink through a school, employer, or existing company that already has resources.","consequence":["You may not own the whole thing, but you can use an existing organization’s budget, kitchen, customers, and distribution.","The tradeoff is control. You gain resources but work inside someone else’s rules."],"indicators":[{"dir":"up","mark":"Resources","label":"Built-in support","note":"A larger organization may already have money, people, and customers."},{"dir":"down","mark":"Rules","label":"Less freedom","note":"You must navigate approvals and institutional priorities."}],"concept":{"name":"Intrapreneurship","body":["<strong>Intrapreneurship</strong> means acting entrepreneurially inside an existing organization.","Instead of starting a separate company, you create a new product, process, or service from within."],"example_title":"Innovation can happen inside large companies","example":["Large companies often buy or build new ideas because their older products cannot carry all future growth.","When a giant company acquires a young brand, the startup’s innovation can become part of the larger company’s internal growth strategy."]}},{"icon":"🤝","title":"Build to be bought","label":"Prove the product works, then sell the company to a larger brand one day.","consequence":["You are building for a future buyer from day one.","That changes what you track: sales growth, repeat customers, brand strength, clean operations, and proof that a bigger company could scale it."],"indicators":[{"dir":"mixed","mark":"Exit","label":"Buyer in mind","note":"This can be a smart goal, but it shapes decisions around what an acquirer values."}],"concept":{"name":"Exit strategy","body":["An <strong>exit strategy</strong> is a founder’s plan for eventually selling the company, merging, going public, or stepping away.","Not every business needs an exit strategy. But investor-backed startups often do, because investors usually make their money when ownership is sold."],"example_title":"Poppi’s acquisition made the exit visible","example":["PepsiCo completed its acquisition of Poppi in 2025 for $1.95 billion.","That acquisition is a clear example of a startup path ending in a sale to a larger company with distribution power."]}}]},{"step":"Step 4 of 8","section":"The Model","accent":"blush","title":"How does money actually flow?","scene":["A product people like is not enough. You need a clear path from customer need to cash in the business.","This is where many student ideas become fuzzy: they know what they want to sell, but not how the money will move."],"prompt":"Choose the money path.","choices":[{"icon":"🧺","title":"Sell it yourself","label":"Sell directly at events, on campus, and through your own website.","consequence":["You keep the customer relationship and learn quickly from every sale.","But you are also the sales team, delivery team, customer service team, and marketing team."],"indicators":[{"dir":"up","mark":"High","label":"Customer control","note":"You know who buys and can follow up with them."},{"dir":"down","mark":"Capped","label":"Scale limit","note":"Direct selling can depend too much on your time."}],"concept":{"name":"Direct-to-consumer model","body":["A <strong>direct-to-consumer</strong> model means selling straight to the buyer without a store or platform in the middle.","The upside is control and better customer learning. The downside is that growth can be slower because you must create your own traffic."],"example_title":"Farmers markets are direct-to-consumer labs","example":["When Poppi was sold at farmers markets, the founders could watch buyers react in real time.","That direct feedback is hard to get once a product is buried on a retail shelf."]}},{"icon":"🛒","title":"Get onto shelves","label":"Sell cases to stores at a lower price so shoppers can find you in more places.","consequence":["You gain reach. A store can put your product in front of thousands of people you would never meet alone.","But the store takes a cut, controls shelf placement, and stands between you and the customer."],"indicators":[{"dir":"up","mark":"Reach","label":"More shoppers","note":"Retail distribution exposes the brand to a much larger audience."},{"dir":"down","mark":"Lower","label":"Margin per unit","note":"Stores buy below the final shelf price, so you keep less per can."}],"concept":{"name":"Wholesale and retail distribution","body":["<strong>Wholesale</strong> means selling to another business, such as a grocery store, that resells your product to customers.","This model trades margin for reach. You keep less per unit, but you may sell far more units."],"example_title":"Poppi needed stores to become a national habit","example":["A beverage brand usually cannot become national one farmers market at a time.","Retail distribution is what turns a drink into something customers can repeatedly grab during normal shopping."]}},{"icon":"📦","title":"Make it a monthly habit","label":"Ship a case every month to people who subscribe.","consequence":["Predictable income makes planning easier.","The hard part is retention. Customers cancel quickly if the product does not become part of their routine."],"indicators":[{"dir":"up","mark":"Predictable","label":"Recurring revenue","note":"Subscriptions smooth out month-to-month income."},{"dir":"mixed","mark":"Habit","label":"Needs repeat use","note":"Subscription works best when the product becomes a routine."}],"concept":{"name":"Subscription model","body":["A <strong>subscription model</strong> charges customers repeatedly — usually monthly or annually — for continued access or recurring delivery.","It works when the product becomes a habit, not when it is a one-time curiosity."],"example_title":"Subscription is about rhythm","example":["Coffee, razors, streaming, software, and meal kits work as subscriptions because customers can predict recurring use.","A beverage subscription would need to become part of the customer’s weekly routine."]}},{"icon":"🔁","title":"Connect two sides","label":"Create a platform where local makers sell leftover or small-batch drinks, and you take a small cut.","consequence":["Now you are not mainly a drink company. You are running the place where buyers and sellers meet.","The challenge is balance: enough sellers to attract buyers, and enough buyers to keep sellers."],"indicators":[{"dir":"up","mark":"Flexible","label":"Many sellers","note":"The platform can grow without you producing every item."},{"dir":"down","mark":"Chicken-egg","label":"Two-sided problem","note":"Both sides need each other, so starting can be difficult."}],"concept":{"name":"Marketplace model","body":["A <strong>marketplace</strong> connects buyers and sellers and usually earns money by taking a commission or fee.","The marketplace often does not own the inventory. Its value is matching, trust, convenience, and payment flow."],"example_title":"Too Good To Go as a social marketplace","example":["Too Good To Go connects users with stores and restaurants that have surplus food available at a discount.","The business model and the social mission reinforce each other: buyers save money, sellers reduce waste, and the platform takes part in the transaction."]}},{"icon":"🎥","title":"Sell through creators","label":"Let creators show the product in short videos and earn money when their viewers buy.","consequence":["One video can move product faster than a flyer ever could.","But you are depending on a platform you do not control, and creators will expect commission."],"indicators":[{"dir":"up","mark":"Fast reach","label":"Built-in audience","note":"Creators can reach buyers who already trust them."},{"dir":"down","mark":"Rented","label":"Platform dependence","note":"The algorithm, rules, and fees can change without asking you."}],"concept":{"name":"Social commerce and affiliate selling","body":["<strong>Social commerce</strong> means shopping happens inside or near social content. <strong>Affiliate selling</strong> means creators earn commission when their content leads to sales.","The business logic is simple: content becomes the store. But the risk is also simple: the platform controls the room."],"example_title":"TikTok Shop turns content into checkout","example":["TikTok’s business documentation describes affiliate creator videos that can be used in Shop Ads, with creators earning commissions when products sell.","That makes creator content part of the sales channel, not just promotion."]}}]},{"step":"Step 5 of 8","section":"The Brand","accent":"purple","title":"Why would anyone choose your drink instead of the hundred already there?","scene":["A grocery aisle is a battlefield of lookalike cans. Everyone says refreshing. Everyone says natural. Everyone says better.","Your product needs a position — a clear place in the customer’s mind."],"prompt":"Choose your brand move.","choices":[{"icon":"📋","title":"Lead with the facts","label":"Make the ingredients and nutrition promise the center of the brand.","consequence":["This can build trust, especially with wellness shoppers.","But facts alone rarely create cultural energy. The brand may feel correct but forgettable."],"indicators":[{"dir":"up","mark":"Credible","label":"Trust builder","note":"Facts help customers believe the product."},{"dir":"mixed","mark":"Quiet","label":"May lack buzz","note":"Accurate claims still need a memorable reason to care."}],"concept":{"name":"Functional positioning","body":["<strong>Positioning</strong> is the place your product occupies in the customer’s mind.","A functional position says, “Choose us because this performs better or solves the problem more clearly.”"],"example_title":"Wellness drinks need credibility and personality","example":["Poppi’s ingredients helped it enter the functional beverage conversation.","But the brand also used color, social media, and cultural energy so it did not feel like a health lecture in a can."]}},{"icon":"☠️","title":"Make it impossible to ignore","label":"Give the brand a funny, edgy personality that sounds nothing like the rest of the aisle.","consequence":["People notice. Some people love it, some people roll their eyes, and almost nobody is neutral.","That can be a strength. A clear brand gives customers something to repeat."],"indicators":[{"dir":"up","mark":"Distinct","label":"Memorable","note":"Strong personality makes an ordinary product easier to remember."},{"dir":"mixed","mark":"Polarizing","label":"Not for everyone","note":"A sharp brand attracts some customers and repels others."}],"concept":{"name":"Differentiation","body":["<strong>Differentiation</strong> is what makes a product meaningfully different from alternatives in the customer’s mind.","A product can be physically ordinary and strategically distinctive if the brand changes how people interpret it."],"example_title":"Liquid Death: brand as the business","example":["Liquid Death sells canned water, a commodity product, but built a distinctive brand voice around humor, rebellion, and anti-plastic positioning.","The water is not the whole business. The brand makes the water feel like something."]}},{"icon":"🎨","title":"Make it collectible","label":"Release limited flavors, colors, or collaborations that people want to show off.","consequence":["Scarcity can create urgency. People act faster when they think the product will disappear.","But if everything is a drop, customers may start collecting the hype instead of loving the core product."],"indicators":[{"dir":"up","mark":"Urgency","label":"People move faster","note":"Limited availability can increase attention and conversion."},{"dir":"mixed","mark":"Hype risk","label":"May fade","note":"Scarcity works best when the product is strong underneath."}],"concept":{"name":"Scarcity and social proof","body":["<strong>Scarcity</strong> makes a product feel more desirable because it is limited. <strong>Social proof</strong> makes people want something because others visibly want it.","Together, they can create momentum — but they can also create fragile hype."],"example_title":"Stanley: colors, drops, and visible demand","example":["Stanley’s Quencher became a visible social object. New colors and collaborations gave people reasons to talk, collect, and line up.","That is not just product design. It is demand design."]}},{"icon":"🪞","title":"Copy the trend","label":"Use the same colors, same fonts, and same wellness language as the brands already going viral.","consequence":["You may look familiar, but familiar is not always valuable.","If customers cannot tell why you exist, you become a cheaper substitute or a temporary copy."],"indicators":[{"dir":"down","mark":"Thin","label":"No moat","note":"A copy is easy for competitors to copy back."},{"dir":"mixed","mark":"Fast","label":"May get attention briefly","note":"Trend-chasing can create quick awareness but weak loyalty."}],"concept":{"name":"Imitation risk","body":["<strong>Imitation risk</strong> is the danger that a business has no clear reason to exist beyond copying what is already popular.","Trends can be useful signals, but a founder still needs a specific customer, promise, and point of view."],"example_title":"Dupe culture shows the risk","example":["When a product becomes hot, cheaper imitators often appear quickly.","The stronger the original brand relationship, the harder it is for copies to steal the most loyal customers."]}}]},{"step":"Step 6 of 8","section":"The Numbers","accent":"amber","title":"Can the business survive the math?","scene":["Each can costs about <strong>$0.80</strong> to make once you include ingredients, the can, packaging, and basic handling.","Now set a price. This choice decides whether you have a business, a charity project, or an expensive hobby."],"prompt":"Choose a price for one can.","choices":[{"icon":"🪙","title":"Very cheap","label":"$1.00 per can so almost everyone says yes.","consequence":["At $1.00, you keep about <strong>$0.20</strong> before other expenses. To clear $2,000, you need to sell about <strong>10,000 cans</strong>.","That price feels accessible, but the math gives you almost no room to breathe."],"indicators":[{"dir":"down","mark":"$0.20","label":"Margin per can","note":"Too little is left after cost."},{"dir":"down","mark":"10,000","label":"Cans for $2,000 gross margin","note":"You need enormous volume just to make a modest amount."}],"concept":{"name":"Thin margin","body":["<strong>Margin</strong> is what remains after the direct cost of one unit is subtracted from the price.","A thin margin can work for giant companies with huge volume. For a small founder, it often means working constantly and still not earning enough."],"example_title":"Cheap only works with volume","example":["Large soda companies can survive low margins because they sell at massive scale.","A new founder usually does not have that volume, so pricing too low can create a business that looks busy but stays broke."]}},{"icon":"⚖️","title":"Middle price","label":"$2.50 per can, a little above regular soda.","consequence":["At $2.50, you keep about <strong>$1.70</strong> before other expenses. To clear $2,000, you need to sell about <strong>1,177 cans</strong>.","This is more workable, but you are still close to mainstream soda pricing, where huge companies have the advantage."],"indicators":[{"dir":"mixed","mark":"$1.70","label":"Margin per can","note":"Better, but not generous once marketing and labor count."},{"dir":"mixed","mark":"1,177","label":"Cans for $2,000 gross margin","note":"A realistic number, but still a lot of selling."}],"concept":{"name":"Competitive pricing","body":["<strong>Competitive pricing</strong> sets your price near similar products.","It can feel safe, but it may trap a small business near competitors with more scale, more shelf space, and more advertising money."],"example_title":"The middle can be dangerous","example":["A new beverage brand has to explain why it costs more than regular soda or water.","Without that reason, customers compare only price, and big competitors usually win."]}},{"icon":"💎","title":"Premium","label":"$4.00 per can because the customer sees it as a better-for-you treat.","consequence":["At $4.00, you keep about <strong>$3.20</strong> before other expenses. To clear $2,000, you need to sell about <strong>625 cans</strong>.","The math finally works — but only if the brand makes customers believe the drink is worth the premium."],"indicators":[{"dir":"up","mark":"$3.20","label":"Margin per can","note":"Enough room to pay for time, marketing, and growth."},{"dir":"up","mark":"625","label":"Cans for $2,000 gross margin","note":"A stronger price reduces the sales volume needed."}],"concept":{"name":"Premium pricing","body":["<strong>Premium pricing</strong> charges more because customers perceive more value.","That value might come from ingredients, taste, design, identity, convenience, trust, or brand culture."],"example_title":"Liquid Death and Poppi both sell perceived value","example":["Liquid Death sells water at a premium through brand and distribution. Poppi sells a soda alternative with wellness and cultural positioning.","In both cases, the can is not priced only by what it costs to make. It is priced by what it means to the customer."]}},{"icon":"👑","title":"Luxury niche","label":"$6.00 per can because it is special, limited, and beautifully branded.","consequence":["At $6.00, you keep about <strong>$5.20</strong> before other expenses. To clear $2,000, you need about <strong>385 cans</strong>.","The margin is strong, but the market shrinks. At that price, the brand has to feel genuinely special."],"indicators":[{"dir":"up","mark":"$5.20","label":"Margin per can","note":"High profit per sale, if buyers agree."},{"dir":"down","mark":"Smaller","label":"Customer pool","note":"A luxury price reduces the number of likely buyers."}],"concept":{"name":"Niche premium","body":["A <strong>niche premium</strong> strategy serves a smaller group willing to pay more.","It can be powerful when the product feels rare, crafted, or culturally meaningful. It fails when the price is high but the value story is thin."],"example_title":"Limited drops can support premium prices","example":["Scarcity and collectability can make customers pay more, as seen in hype-driven categories from sneakers to limited drinkware colors.","But if the product disappoints, scarcity only works once."]}}]},{"step":"Step 7 of 8","section":"The Money","accent":"sage","title":"Demand is growing. You are out of money. Now what?","scene":["Good problem, scary problem: stores want more product than you can make.","Every option below brings money into the business. Every option also costs you something besides money: time, control, ownership, obligation, or pressure."],"prompt":"Choose how to fund growth. Notice: the choices are plain language first; the formal term comes after.","choices":[{"icon":"🌱","title":"Use your own cash","label":"Use savings, sell slowly, and put every dollar back into the business.","consequence":["You keep all ownership and all decision-making power.","The cost is speed. You can only grow as fast as your own money allows."],"indicators":[{"dir":"up","mark":"100%","label":"Ownership","note":"You keep the whole company."},{"dir":"down","mark":"Slow","label":"Growth speed","note":"You may lose time while competitors move faster."}],"concept":{"name":"Bootstrapping","body":["<strong>Bootstrapping</strong> means funding the business mostly with your own money and the money the business earns.","It protects ownership, but it can limit how fast you grow."],"example_title":"Local businesses often bootstrap","example":["A mobile detailing business, tutoring service, or home bakery may begin with personal savings and reinvested profits.","That can be smart when the business does not require national speed."]}},{"icon":"🏦","title":"Borrow and repay","label":"Borrow a fixed amount from a lender, keep the company, and make monthly payments with interest.","consequence":["You keep ownership, which is powerful.","But the payment is due whether sales are strong or weak. Borrowed money has a calendar."],"indicators":[{"dir":"up","mark":"Keep","label":"Ownership","note":"You do not give away a piece of the company."},{"dir":"down","mark":"Owe","label":"Repayment","note":"You must repay on schedule, even during slow months."}],"concept":{"name":"Debt financing and SBA-backed loans","body":["<strong>Debt financing</strong> means borrowing money and repaying it with interest.","An <strong>SBA-backed loan</strong> is a small-business loan where the U.S. Small Business Administration helps reduce the lender’s risk. That can make banks more willing to lend, but the business still owes the money."],"example_title":"Best fit: steady businesses with repayment capacity","example":["A bakery buying equipment or a cleaning business buying a van may fit debt better than investor money, because the goal is steady cash flow, not explosive national scale.","The key question is: can the business handle payments even when sales dip?"]}},{"icon":"📣","title":"Ask buyers to commit early","label":"Run a campaign where many people pre-order, then use that money to produce the first big batch.","consequence":["You get money and proof of demand at the same time.","But now you owe customers a product. If production goes wrong, trust breaks fast."],"indicators":[{"dir":"up","mark":"Proof","label":"Demand signal","note":"Pre-orders show that people are willing to pay before the product is widely available."},{"dir":"down","mark":"Promise","label":"Delivery risk","note":"Customers expect you to fulfill what you promised."}],"concept":{"name":"Crowdfunding and pre-orders","body":["<strong>Crowdfunding</strong> raises smaller amounts of money from many supporters, often through a campaign page.","<strong>Pre-orders</strong> let customers pay before the product is ready. They can fund production, but they also create obligations."],"example_title":"Best fit: visible products with a community","example":["Board games, creative products, apparel drops, gadgets, and community food projects can work well because supporters understand what they are backing.","For food and beverage, the founder must be especially careful about safety, production, and delivery timelines."]}},{"icon":"🪽","title":"Take money from one experienced person","label":"An experienced business person gives you money and advice in exchange for a small ownership share.","consequence":["You gain cash, advice, and connections.","The cost is permanent: that person now owns a piece of the company and may have opinions about your decisions."],"indicators":[{"dir":"up","mark":"Help","label":"Money plus advice","note":"The right person can open doors and teach you what you do not know."},{"dir":"mixed","mark":"Shared","label":"Ownership","note":"You no longer own the whole company."}],"concept":{"name":"Angel investor and equity financing","body":["An <strong>angel investor</strong> is usually an individual who invests personal money into an early-stage business.","<strong>Equity financing</strong> means receiving money in exchange for ownership. You do not repay it like a loan, but you give up a slice of the company."],"example_title":"Shark Tank is angel-style tradeoff theater","example":["When a founder takes a Shark Tank deal, the core tradeoff is usually cash and connections in exchange for ownership.","The question is not only “how much money?” It is “what percentage, what help, and what control?”"]}},{"icon":"🚀","title":"Take a large check from a firm","label":"A professional investment firm gives serious money, expects fast national growth, and wants influence over big decisions.","consequence":["This is rocket fuel. You can hire, manufacture, distribute, and grow much faster.","But the pressure changes the business. The firm expects large returns, and your timeline is no longer only yours."],"indicators":[{"dir":"up","mark":"Fast","label":"Growth speed","note":"Large investment can help the company move nationally."},{"dir":"down","mark":"Pressure","label":"Return expectations","note":"Investors expect a big outcome, often a sale or IPO."},{"dir":"mixed","mark":"Shared","label":"Control","note":"Major investors often want formal influence."}],"concept":{"name":"Venture capital","body":["<strong>Venture capital</strong> is money from investment firms that back businesses with the potential for very large growth.","VC money is not designed for every good business. It fits companies that could become huge and generate investor-scale returns."],"example_title":"Best fit: scalable startup, not every business","example":["A local bakery may be excellent without being a venture capital business. A software platform or national beverage brand may fit VC logic better.","The funding has to match the type of entrepreneurship."]}}]},{"step":"Step 8 of 8","section":"The Turn","accent":"blush","title":"The plan just met reality. Now decide.","scene":["Your first packaging is too expensive to ship. A competitor launches something similar. Customers like the taste but say the brand feels confusing.","This is the moment where founders either learn or cling."],"prompt":"Make the call.","choices":[{"icon":"🧱","title":"Protect the original plan","label":"Keep the name, packaging, and message because changing now feels like failure.","consequence":["This feels loyal, but the evidence is flashing red.","Confidence is valuable. Confidence that refuses to read evidence becomes expensive."],"indicators":[{"dir":"down","mark":"Rigid","label":"Evidence ignored","note":"The plan becomes more important than the customer."}],"concept":{"name":"Plan persistence risk","body":["<strong>Plan persistence risk</strong> is the danger of sticking to an original idea after the evidence says it is not working.","Founders need conviction, but conviction must still be accountable to reality."],"example_title":"The original version is rarely the final version","example":["Many strong companies look obvious after they succeed, but their early versions were often messy, confusing, or aimed at the wrong audience.","The founder’s job is not to worship the first draft."]}},{"icon":"🔄","title":"Keep the core, change the rest","label":"Keep the drink people love, but change the name, package, and message.","consequence":["This is hard because it feels like admitting the first version missed.","But it keeps the valuable part — the product customers like — and changes what the evidence says is blocking growth."],"indicators":[{"dir":"up","mark":"Adaptive","label":"Evidence used","note":"You preserved the core and changed the weak parts."}],"concept":{"name":"Pivot","body":["A <strong>pivot</strong> is a deliberate change in direction based on evidence.","It is not random panic. It keeps what works and changes what does not."],"example_title":"Poppi’s rebrand is the cleanest anchor","example":["Poppi started as Mother Beverage. The company later rebranded with a new name, brighter cans, and a more playful identity.","The drink stayed. The frame changed. That is the pivot you can actually see."]}},{"icon":"🧫","title":"Test two versions","label":"Run a small test comparing two names, two packages, or two prices before changing everything.","consequence":["This is careful and useful. You do not have to guess which version is stronger; you can test.","The risk is waiting too long. Experiments should speed up decisions, not delay them forever."],"indicators":[{"dir":"up","mark":"Evidence","label":"Better comparison","note":"You let customers reveal which option works."},{"dir":"mixed","mark":"Timing","label":"Decision still needed","note":"Testing is only useful if you act on the result."}],"concept":{"name":"Experimentation","body":["<strong>Experimentation</strong> means changing one thing and observing what happens.","Strong experiments are small, clear, and tied to a decision: which version should we keep?"],"example_title":"A/B thinking in everyday business","example":["A founder can test two prices, two subject lines, two package designs, two videos, or two menu items.","The point is not to look scientific. The point is to stop guessing when evidence is possible."]}},{"icon":"🏁","title":"Sell or license it","label":"Look for a bigger company that can produce and distribute it better than you can.","consequence":["You may lose independence, but the product could reach far more people.","This can be smart if the bigger company has strengths you do not: manufacturing, shelf access, legal teams, and distribution."],"indicators":[{"dir":"mixed","mark":"Trade","label":"Reach for independence","note":"A larger company can scale the product, but you may give up control."}],"concept":{"name":"Acquisition or licensing","body":["An <strong>acquisition</strong> means another company buys the business. <strong>Licensing</strong> means another company pays for the right to use something you created.","Both are ways a founder can let a bigger organization scale an idea."],"example_title":"Poppi’s acquisition by PepsiCo","example":["In 2025, PepsiCo completed its acquisition of Poppi for $1.95 billion.","That is a clear version of the bigger-company path: the startup’s brand plus the acquirer’s scale."]}},{"icon":"🛑","title":"Stop before more money disappears","label":"Shut it down, save what you can, and use what you learned for the next idea.","consequence":["Stopping can be painful, but it can also be disciplined.","The key is whether you are stopping because the evidence is clear or because the first hard moment scared you."],"indicators":[{"dir":"mixed","mark":"Disciplined","label":"Loss control","note":"Sometimes the smartest move is not to keep spending."}],"concept":{"name":"Sunk cost discipline","body":["<strong>Sunk costs</strong> are resources already spent that you cannot recover.","A founder with sunk cost discipline asks, “Given what I know now, should I keep going?” not “How much have I already spent?”"],"example_title":"Not every idea deserves more money","example":["Entrepreneurship is not blind persistence. Some ideas should be tested, changed, or stopped.","Stopping one weak version can preserve energy for a stronger version later."]}}]}]</script>
+
+<script type="application/json" id="glossary-data">[{"term": "Opportunity recognition", "plain": "Spotting a real problem or desire people may pay to address."}, {"term": "Customer segment", "plain": "The specific group you serve first."}, {"term": "Value proposition", "plain": "Why that group chooses you instead of doing nothing or buying something else."}, {"term": "Small business entrepreneurship", "plain": "A business built for steady income, owner control, and a defined market."}, {"term": "Scalable startup entrepreneurship", "plain": "A business designed to grow quickly across markets with a repeatable model."}, {"term": "Social entrepreneurship", "plain": "A venture using business tools to address a social or environmental problem."}, {"term": "Intrapreneurship", "plain": "Building something new inside an existing organization."}, {"term": "Business model", "plain": "How money flows into the business."}, {"term": "Unit economics", "plain": "The math on one unit: price, cost, and margin."}, {"term": "Bootstrapping", "plain": "Using personal savings and business earnings instead of outside investors."}, {"term": "Debt financing", "plain": "Borrowing money and repaying it with interest."}, {"term": "Equity financing", "plain": "Taking money in exchange for a share of ownership."}, {"term": "Angel investor", "plain": "An individual who invests personal money into an early-stage business."}, {"term": "Venture capital", "plain": "Investment-firm money for businesses with very large growth potential."}, {"term": "Pivot", "plain": "Changing direction based on evidence while keeping what works."}]</script>
+<script type="application/json" id="read-data">{"spark": ["You began by trusting compliments. Your next growth edge is converting excitement into proof.", "You began by asking whether people would actually pay. That is evidence-led founder behavior.", "You began with a small test. That is the safest way to make reality talk back.", "You began by looking for a pattern. That is how a founder separates a personal preference from a market."], "path": ["You leaned toward a steady local business.", "You leaned toward a scalable startup.", "You leaned toward a mission-driven venture.", "You leaned toward intrapreneurship inside a larger organization.", "You leaned toward building for a future exit."], "money": ["When money got tight, you protected ownership through bootstrapping.", "When money got tight, you chose debt and kept ownership while accepting repayment pressure.", "When money got tight, you asked customers to commit early through pre-orders or crowdfunding.", "When money got tight, you traded some ownership for help from an early investor.", "When money got tight, you chose venture-style fuel and accepted high-growth pressure."], "turn": ["When reality shifted, you protected the original plan.", "When reality shifted, you pivoted.", "When reality shifted, you tested before changing everything.", "When reality shifted, you looked for a larger company to scale it.", "When reality shifted, you considered stopping before more money disappeared."]}</script>
+<script>
+(() => {
+  "use strict";
+  const ROUNDS = JSON.parse(document.getElementById("lesson-data").textContent);
+  const GLOSSARY = JSON.parse(document.getElementById("glossary-data").textContent);
+  const READ = JSON.parse(document.getElementById("read-data").textContent);
+
+  const app = document.getElementById("app");
+  const letters = ["A","B","C","D","E"];
+  const optionClasses = ["option-a","option-b","option-c","option-d","option-e"];
+  const edges = ["#7a5200","#1f5d99","#2f6f44","#87385a","#59479a"];
+  const bgs = ["#fff4d7","#eaf2ff","#eaf7ef","#fdebf3","#f1ecff"];
+  const state = { round: -1, choices: {} };
+
+  const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(prefersReduced) document.documentElement.classList.add("reduce-motion");
+
+  function setPressed(button, isPressed){
+    button.setAttribute("aria-pressed", String(isPressed));
+  }
+  document.getElementById("readerToggle").addEventListener("click", (e)=>{
+    document.body.classList.toggle("reader-mode");
+    setPressed(e.currentTarget, document.body.classList.contains("reader-mode"));
+  });
+  document.getElementById("contrastToggle").addEventListener("click", (e)=>{
+    document.body.classList.toggle("high-contrast");
+    setPressed(e.currentTarget, document.body.classList.contains("high-contrast"));
+  });
+  document.getElementById("motionToggle").addEventListener("click", (e)=>{
+    document.documentElement.classList.toggle("reduce-motion");
+    setPressed(e.currentTarget, document.documentElement.classList.contains("reduce-motion"));
+  });
+
+  function safeScroll(el){
+    if(document.documentElement.classList.contains("reduce-motion")){
+      el.scrollIntoView({block:"start"});
+    } else {
+      el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+  }
+
+  function rail(index){
+    const total = ROUNDS.length;
+    const label = index >= 0 ? `${ROUNDS[index].step}: ${ROUNDS[index].section}` : "Not started";
+    let dots = "";
+    for(let i=0;i<total;i++){
+      let cls = "dot";
+      if(i < index) cls += " done";
+      if(i === index) cls += " active";
+      dots += `<span class="${cls}" aria-hidden="true"></span>`;
+    }
+    return `
+      <section class="rail-wrap" aria-label="Simulation progress">
+        <p class="rail-label">${label}</p>
+        <p class="sr-only">Progress: step ${index + 1} of ${total}.</p>
+        <div class="rail">${dots}</div>
+      </section>
+    `;
+  }
+
+  function sourceLinksForConcept(conceptName){
+    const name = conceptName.toLowerCase();
+    const links = [];
+    if(name.includes("poppi") || name.includes("pivot") || name.includes("acquisition") || name.includes("exit") || name.includes("scalable") || name.includes("opportunity") || name.includes("customer")){
+      links.push({label:"Poppi source", url:"https://www.pepsico.com/en/newsroom/press-releases/2025/pepsico-to-acquire-poppi"});
+      links.push({label:"Poppi Instagram", url:"https://www.instagram.com/drinkpoppi/"});
+    }
+    if(name.includes("differentiation") || name.includes("premium") || name.includes("undifferentiated")){
+      links.push({label:"Liquid Death source", url:"https://www.businesswire.com/news/home/20240310837019/en/Liquid-Death-closes-%2467-million-in-strategic-financing-including-top-distributors-at-%241.4-billion-valuation"});
+      links.push({label:"Liquid Death Instagram", url:"https://www.instagram.com/liquiddeath/"});
+    }
+    if(name.includes("social entrepreneurship") || name.includes("marketplace")){
+      links.push({label:"Too Good To Go source", url:"https://www.toogoodtogo.com/en-us/"});
+    }
+    if(name.includes("social commerce") || name.includes("affiliate")){
+      links.push({label:"TikTok Shop source", url:"https://ads.tiktok.com/help/article/about-affiliate-creatives-for-tiktok-shop-ads"});
+    }
+    if(name.includes("scarcity") || name.includes("social proof") || name.includes("value proposition")){
+      links.push({label:"Stanley video", url:"https://www.youtube.com/watch?v=RADEfBJmtk4"});
+      links.push({label:"CNBC Make It Reels", url:"https://www.instagram.com/cnbcmakeit/reels/"});
+    }
+    return links.slice(0,3);
+  }
+
+  function showHero(){
+    state.round = -1;
+    state.choices = {};
+    app.innerHTML = `
+      <div class="fade">
+        <p class="eyebrow">Entrepreneurship simulation</p>
+        <section class="hero-card">
+          <h1 class="hero">The Founder’s Room</h1>
+          <p class="lede">You are building a fizzy drink business from the first spark to the moment reality pushes back.</p>
+          <p>People keep asking about a drink you made at home. Maybe it is a business. Maybe it is a hobby. Maybe it is a trend with no money behind it. Your job is to test the difference.</p>
+          <p>Each round gives you a founder decision. Choose what you would do next, then see what happened and how the decision connects to entrepreneurship.</p>
+          <div class="actions">
+            <button class="btn primary" type="button" id="startBtn">Step into the room</button>
+          </div>
+          <p class="note">No score. No login. Nothing is saved. Replay paths and compare tradeoffs.</p>
+        </section>
+      </div>
+    `;
+    document.getElementById("startBtn").addEventListener("click", () => showRound(0));
+    app.focus();
+  }
+
+  function showRound(index){
+    state.round = index;
+    const r = ROUNDS[index];
+    const sceneEdge = edges[index % edges.length];
+    const sceneHTML = r.scene.map(p => `<p>${p}</p>`).join("");
+    const choicesHTML = r.choices.map((ch, idx) => {
+      const pressed = state.choices[index] === idx ? "true" : "false";
+      return `
+        <button class="choice ${optionClasses[idx]}" type="button" data-choice="${idx}" aria-pressed="${pressed}">
+          <span class="choice-marker" aria-hidden="true">
+            <span class="tag">${letters[idx]}</span>
+            <span class="icon">${ch.icon || ""}</span>
+          </span>
+          <span>
+            <span class="choice-title">${ch.title}<span class="selected-text">Selected</span></span>
+            <span class="choice-label">${ch.label}</span>
+          </span>
+        </button>
+      `;
+    }).join("");
+    app.innerHTML = `
+      <div class="fade">
+        ${rail(index)}
+        <p class="eyebrow">${r.step} · ${r.section}</p>
+        <h2 class="q">${r.title}</h2>
+        <section class="scene" style="--scene-edge:${sceneEdge}" aria-label="Scenario">
+          ${sceneHTML}
+        </section>
+        <p class="prompt">${r.prompt}</p>
+        <div class="choices" id="choices" aria-label="Answer choices">
+          ${choicesHTML}
+        </div>
+        <section class="result" id="result" role="region" aria-live="polite" aria-labelledby="resultTitle" tabindex="-1" hidden></section>
+      </div>
+    `;
+    document.querySelectorAll(".choice").forEach(btn => {
+      btn.addEventListener("click", () => pick(index, Number(btn.dataset.choice)));
+    });
+    app.focus();
+    window.scrollTo({top:0, behavior: document.documentElement.classList.contains("reduce-motion") ? "auto" : "smooth"});
+  }
+
+  function pick(roundIndex, choiceIndex){
+    const r = ROUNDS[roundIndex];
+    const ch = r.choices[choiceIndex];
+    state.choices[roundIndex] = choiceIndex;
+
+    document.querySelectorAll(".choice").forEach((btn, idx) => {
+      btn.setAttribute("aria-pressed", String(idx === choiceIndex));
+    });
+
+    const result = document.getElementById("result");
+    const currentEdge = edges[choiceIndex] || edges[0];
+    const currentBg = bgs[choiceIndex] || bgs[0];
+    const consequenceHTML = ch.consequence.map(p => `<p>${p}</p>`).join("");
+    const indicatorsHTML = (ch.indicators || []).map(ind => `
+      <div class="ind">
+        <span class="mark ${ind.dir}">${ind.dir === "up" ? "▲" : ind.dir === "down" ? "▼" : "●"} ${ind.mark}</span>
+        <span class="ind-body"><strong>${ind.label}.</strong> ${ind.note}</span>
+      </div>
+    `).join("");
+    const conceptHTML = ch.concept.body.map(p => `<p>${p}</p>`).join("");
+    const exampleHTML = ch.concept.example.map(p => `<p>${p}</p>`).join("");
+    const dynamicLinks = sourceLinksForConcept(ch.concept.name + " " + ch.concept.example_title);
+    const linksHTML = dynamicLinks.length ? `
+      <div class="links" aria-label="Related sources and short clip links">
+        ${dynamicLinks.map(l => `<a class="pill-link" href="${l.url}" target="_blank" rel="noopener noreferrer">${l.label}</a>`).join("")}
+      </div>
+    ` : "";
+    const isLast = roundIndex === ROUNDS.length - 1;
+    result.style.setProperty("--current-edge", currentEdge);
+    result.style.setProperty("--current-bg", currentBg);
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="fade">
+        <div class="result-panel what">
+          <p class="kicker" id="resultTitle">What happened</p>
+          ${consequenceHTML}
+          ${indicatorsHTML ? `<div class="indicators">${indicatorsHTML}</div>` : ""}
+        </div>
+        <div class="result-panel term">
+          <p class="kicker">The name for your decision</p>
+          <h3>${ch.concept.name}</h3>
+          ${conceptHTML}
+        </div>
+        <div class="result-panel example">
+          <p class="kicker">Contemporary anchor</p>
+          <h3>${ch.concept.example_title}</h3>
+          ${exampleHTML}
+          ${linksHTML}
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="button" id="continueBtn">${isLast ? "See founder readout" : "Continue"}</button>
+          <button class="btn ghost" type="button" id="resetChoiceBtn">Try another choice in this round</button>
+        </div>
+      </div>
+    `;
+    document.getElementById("continueBtn").addEventListener("click", () => isLast ? showEnding() : showRound(roundIndex + 1));
+    document.getElementById("resetChoiceBtn").addEventListener("click", () => {
+      delete state.choices[roundIndex];
+      document.querySelectorAll(".choice").forEach(btn => btn.setAttribute("aria-pressed", "false"));
+      result.hidden = true;
+      result.innerHTML = "";
+      safeScroll(document.getElementById("choices"));
+    });
+    result.focus();
+    safeScroll(result);
+  }
+
+  function characterize(c){
+    const evidenceLed = [1,2,3].includes(c[0]);
+    const scalable = c[2] === 1;
+    const mission = c[2] === 2;
+    const vc = c[6] === 4;
+    const bootstrap = c[6] === 0;
+    const pivot = c[7] === 1;
+    const test = c[7] === 2;
+    const rigid = c[7] === 0;
+
+    if(evidenceLed && pivot){
+      return "Your pattern is evidence-led and adaptive. You test before committing, then change direction when the evidence changes.";
+    }
+    if(evidenceLed && test){
+      return "Your pattern is careful and experimental. You do not guess when you can test. The next muscle is deciding quickly after the test speaks.";
+    }
+    if(rigid){
+      return "Your pattern shows conviction, which founders need, but the caution is clear: conviction has to answer to evidence or it becomes expensive.";
+    }
+    if(scalable && vc){
+      return "Your pattern fits a high-growth startup logic: scale, outside capital, and pressure. The big question is whether the opportunity is large enough to deserve that fuel.";
+    }
+    if(mission){
+      return "Your pattern is mission-led. The important discipline is making the impact model and the money model support each other, not fight each other.";
+    }
+    if(bootstrap){
+      return "Your pattern protects control. That can be wise, especially when the goal is steady ownership rather than investor-speed growth.";
+    }
+    return "Your choices show that entrepreneurship is not one personality type. It is a sequence of tradeoffs: evidence, customer, model, money, and adaptation.";
+  }
+
+  function showEnding(){
+    const c = ROUNDS.map((_, idx) => typeof state.choices[idx] === "number" ? state.choices[idx] : 0);
+    const readLine = `${READ.spark[c[0]]} ${READ.path[c[2]]} ${READ.money[c[6]]} ${READ.turn[c[7]]}`;
+    const glossaryHTML = GLOSSARY.map((g, idx) => `
+      <div class="chip">
+        <h4>${g.term}</h4>
+        <p>${g.plain}</p>
+      </div>
+    `).join("");
+    app.innerHTML = `
+      <div class="fade">
+        <p class="eyebrow">Founder readout</p>
+        <section class="read">
+          <h2 class="q">The kind of founder path you played</h2>
+          <p>${readLine}</p>
+          <p>${characterize(c)}</p>
+        </section>
+
+        <section class="end-card">
+          <p class="eyebrow">Founder toolkit</p>
+          <h2 class="q">Your decision vocabulary</h2>
+          <p>Use these terms to explain the decisions and examples you just worked through.</p>
+        </section>
+
+        <section aria-label="Glossary">
+          <div class="toolkit">${glossaryHTML}</div>
+        </section>
+
+        <section class="read">
+          <h3>Reflection</h3>
+          <p>Choose one real business from this simulation — Poppi, Liquid Death, Stanley, Too Good To Go, TikTok Shop creator commerce, or a local business you know.</p>
+          <p>In 200–300 words, explain where its success really comes from: the problem, the customer, the brand, the business model, the unit economics, the funding path, timing, or the ability to pivot. Use at least three terms from the glossary.</p>
+        </section>
+
+        <div class="actions">
+          <button class="btn primary" type="button" id="restartBtn">Walk it again</button>
+        </div>
+      </div>
+    `;
+    document.getElementById("restartBtn").addEventListener("click", showHero);
+    app.focus();
+    window.scrollTo({top:0, behavior: document.documentElement.classList.contains("reduce-motion") ? "auto" : "smooth"});
+  }
+
+  showHero();
+})();
+</script>
+<noscript>
+  <div class="wrap">
+    <section class="hero-card">
+      <h1>The Founder’s Room</h1>
+      <p>This simulation needs JavaScript enabled because it reveals feedback after each choice.</p>
+    </section>
+  </div>
+</noscript>
+</body>
+</html>
